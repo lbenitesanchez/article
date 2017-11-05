@@ -1,0 +1,37 @@
+#The results of EM estimates, see Table 1, were obtained by using the following instructions
+data(ais, package="sn")
+attach(ais)
+sexInd <- (sex=="female")+0
+x      <- cbind(1,LBM,sexInd)
+y      <- BMI
+perc   <- 0.5
+res    <- EM.qr(y,x,perc)
+
+
+#The instructions for the Figure 5 are: 
+res<-EM.qr(y,x,tau)
+names(res)
+di <- res$di
+plot(di,ylab=expression(paste("distance ", d[i])),main="p=0.5" )
+abline(h=mean(di)+qexp(0.95)*apply(di,2,sd),lty=2)
+identify(di,n=4)
+Weights=res$Weights
+plot(di,Weights,xlab=expression(paste("distance ", d[i])), ylab="Estimated weight" ,main="p=0.5", ylim=c(0,10))
+
+#Figure 7(first row) was obtained by using the following instructions:
+GDi0.1 <-  diag.qr(y,x,0.1,EM.qr(y,x,0.1)$theta)$GDi
+GDi0.5 <-  diag.qr(y,x,0.1,EM.qr(y,x,0.5)$theta)$GDi
+GDi0.9 <-  diag.qr(y,x,0.1,EM.qr(y,x,0.9)$theta)$GDi
+plot(seq(1:202),GDi0.1,xlab='Index',ylab=expression(paste(GD[i])),main='p=0.1')
+plot(seq(1:202),GDi0.5,xlab='Index',ylab=expression(paste(GD[i])),main='p=0.5')
+plot(seq(1:202),GDi0.9,xlab='Index',ylab=expression(paste(GD[i])),main='p=0.9')
+
+
+#Figure 7(first row) was obtained by using the following instructions:
+QDi0.1     <- diag.qr(y,x,0.1,EM.qr(y,x,0.1)$theta)$QDi
+QDi0.5     <- diag.qr(y,x,0.5,EM.qr(y,x,0.5)$theta)$QDi
+QDi0.9     <- diag.qr(y,x,0.9,EM.qr(y,x,0.9)$theta)$QDi
+plot(seq(1:202),QDi0.1,xlab='Index',ylab=expression(paste(QD[i])),main='p=0.1')
+plot(seq(1:202),QDi0.5,xlab='Index',ylab=expression(paste(QD[i])),main='p=0.5')
+plot(seq(1:202),QDi0.9,xlab='Index',ylab=expression(paste(QD[i])),main='p=0.9')
+ 
